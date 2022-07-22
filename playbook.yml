@@ -1,0 +1,5 @@
+---
+- name: Setup Arch Linux
+  hosts: archlinux
+  roles:
+    - archlinux

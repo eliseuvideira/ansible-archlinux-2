@@ -1,0 +1,25 @@
+---
+- name: Create Group `wheel`
+  group:
+    name: wheel
+    state: present
+
+- name: Allow `wheel` Sudo Privileges
+  lineinfile:
+    dest: /etc/sudoers
+    state: present
+    regexp: "# %wheel ALL=\\(ALL:ALL\\) NOPASSWD: ALL"
+    line: "%wheel ALL=(ALL:ALL) NOPASSWD: ALL"
+    validate: "/usr/bin/visudo -cf %s"
+
+- name: Create Group `docker`
+  group:
+    name: docker
+    state: present
+
+- name: Create User
+  user:
+    name: "{{ user }}"
+    shell: /bin/zsh
+    groups: wheel,docker
+    append: true

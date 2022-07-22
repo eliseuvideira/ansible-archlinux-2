@@ -1,0 +1,4 @@
+---
+dependencies:
+  - role: archlinux-user
+  - role: paru

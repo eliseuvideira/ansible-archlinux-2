@@ -1,0 +1,42 @@
+---
+- name: Check Missing Packages
+  become: true
+  become_user: "{{ user }}"
+  shell: |
+    #!/bin/bash
+    comm -23 <(echo "{{ packages | join(' ') }}" | tr " " "\n" | sort) <(paru -Q | cut -d ' ' -f 1 | sort)
+  register: missing_packages
+  changed_when: missing_packages.stdout_lines | length != 0
+  vars:
+    packages:
+      - ansible
+      - cronie
+      - curl
+      - docker
+      - docker-compose
+      - jq
+      - less
+      - nodejs
+      - npm
+      - neovim
+      - nvm
+      - oh-my-zsh-git
+      - rsync
+      - shellcheck
+      - stow
+      - tmux
+      - vi
+      - vim
+      - yarn
+
+- set_fact:
+    should_install_packages: "{{ missing_packages.stdout_lines | length != 0  }}"
+    packages: "{{ missing_packages.stdout_lines | join(' ') }}"
+
+- name: Install Missing Packages
+  become: true
+  become_user: "{{ user }}"
+  shell: |
+    #!/bin/sh
+    /usr/bin/paru -S $(echo "{{ packages }}") --noconfirm
+  when: should_install_packages

@@ -1,0 +1,11 @@
+---
+all:
+  hosts:
+    archlinux-1:
+      ansible_host: 10.0.1.10
+      ansible_user: root
+
+archlinux:
+  hosts:
+    archlinux-1:
+      user: example
